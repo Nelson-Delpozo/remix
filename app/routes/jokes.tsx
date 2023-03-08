@@ -1,11 +1,12 @@
 import type { LinksFunction } from "@remix-run/node";
-import { Outlet, Link } from "@remix-run/react";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import type { Joke } from "@prisma/client";
+import {
+    Link,
+    Outlet,
+    useLoaderData,
+} from "@remix-run/react";
 
 import stylesUrl from "~/styles/jokes.css";
-
 import { db } from "~/utils/db.server";
 
 export const links: LinksFunction = () => {
@@ -15,14 +16,10 @@ export const links: LinksFunction = () => {
 export const loader = async () => {
     return json({
         jokeListItems: await db.joke.findMany(),
-        take: 5,
-        select: { id: true, name: true },
-        orderBy: { createdAt: "desc" },
     });
 };
 
 export default function JokesRoute() {
-
     const data = useLoaderData<typeof loader>();
 
     return (
